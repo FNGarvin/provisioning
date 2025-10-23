@@ -61,7 +61,7 @@ Please note the specific licensing for each set of scripts:
 
 ## 🛠️ Nunchaku Build Prerequisites
 
-Since Nunchaku does not provide binaries against the Torch 2.9 that Comfy Slim has recently (as of this writing) updated to, we will need a custom build.  The script by default downloads binaries that *I* have built.  As a general rule, you never want to use binaries from a stranger.  For use in a throwaway container, though...  maybe it's worth saving ~10-60 minutes.  We default to downloading my binaries, but you can execute the script with a "build" argument if you want to build from source.  For example,  ```curl -s https://raw.githubusercontent.com/FNGarvin/provisioning/main/flux_nunchaku_int4.sh build | bash```
+Since Nunchaku does not provide binaries against the Torch 2.9 that Comfy Slim has recently (as of this writing) updated to, we will need a custom build.  The script by default downloads binaries that *I* have built.  As a general rule, you never want to use binaries from a stranger.  For use in a throwaway container, though...  maybe it's worth saving ~10-60 minutes.  We default to downloading my binaries, but you can execute the script with a "build" argument if you want to build from source.  For example,  ```curl -s https://raw.githubusercontent.com/FNGarvin/provisioning/main/flux_nunchaku_int4.sh | bash -s build```
 
 ## 📦 Utility Script (For Developers)
 
