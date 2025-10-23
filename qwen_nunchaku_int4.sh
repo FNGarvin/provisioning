@@ -66,6 +66,8 @@ fi
 
 # Install the GGUF Python dependency for the GGUF Text Encoder model
 pip3 install --upgrade gguf || exit 1
+# Install the GGUF node for loading the Qwen-Image GGUF parts
+git clone https://github.com/city96/ComfyUI-GGUF.git "${COMFYUI_DIR}/custom_nodes/ComfyUI-GGUF" || exit 1
 
 # Placeholder for Xformers
 # Dynamically detect the CUDA version PyTorch was built against.
