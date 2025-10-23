@@ -7,6 +7,10 @@
 # It assumes the environment and paths match that image, including the presence
 # of the ComfyUI Manager, Python venv, and necessary build tools.
 #
+# USAGE:
+#   ./qwen_nunchaku_fp4.sh          # Default: Installs Nunchaku from pre-built wheel.
+#   ./qwen_nunchaku_fp4.sh build    # Builds Nunchaku from source.
+#
 
 # --- Configuration ---
 # Define base paths to avoid using 'cd'. This makes the script more robust.
@@ -14,40 +18,54 @@ readonly COMFYUI_DIR="/workspace/madapps/ComfyUI"
 readonly VENV_PATH="${COMFYUI_DIR}/.venv/bin/activate"
 readonly NUNCHAKU_TEMP_DIR="/tmp/nunchaku_build"
 
-apt-get update
+# --- Core Dependencies ---
+apt-get update || exit 1
 apt-get install -y aria2 || exit 1
 
-#Add NVIDIA CUDA repository to install CUDA development libraries.
-echo "INFO: Adding NVIDIA CUDA repository for development libraries..."
-wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb || exit 1
-dpkg -i cuda-keyring_1.1-1_all.deb || exit 1
-rm cuda-keyring_1.1-1_all.deb || exit 1
-apt-get update
+# --- Nunchaku Installation ---
+# This section installs the custom node and the required Python package.
+# It uses a pre-built wheel by default for speed, but will compile from
+# source if the 'build' parameter is provided.
 
-#Install the necessary CUDA development libraries for Nunchaku compilation.
-echo "INFO: Installing CUDA development libraries for Nunchaku compilation..."
-apt-get install -y libcublas-dev-12-8 cuda-nvtx-12-8 libcusparse-dev-12-8 libcusolver-dev-12-8 || exit 1
-
-# --- NUNCHAKU COMPILATION (Prioritized for Stability) ---
-echo "INFO: Compiling Nunchaku from source for PyTorch 2.9.0/cu128..."
-
-# Install the Nunchaku Custom Node
+# Install the Nunchaku Custom Node (required for both methods)
+echo "INFO: Installing ComfyUI-nunchaku custom node..."
 git clone https://github.com/mit-han-lab/ComfyUI-nunchaku.git "${COMFYUI_DIR}/custom_nodes/ComfyUI-nunchaku" || exit 1
 
-# Activate venv and build the Python package
-echo "INFO: Activating Python venv and installing required packages (gguf, Nunchaku)..."
-# Activate the virtual environment
+# Activate the virtual environment (required for both methods)
+echo "INFO: Activating Python virtual environment..."
 # shellcheck source=/dev/null
 source "${VENV_PATH}" || exit 1
 
+# Check for the 'build' parameter to decide installation method
+if [[ "$1" == "build" ]]; then
+    # --- BUILD FROM SOURCE ---
+    echo "INFO: 'build' parameter detected. Compiling Nunchaku from source."
+
+    # Install build-time system dependencies
+    echo "INFO: Adding NVIDIA CUDA repository for development libraries..."
+    wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb || exit 1
+    dpkg -i cuda-keyring_1.1-1_all.deb || exit 1
+    rm cuda-keyring_1.1-1_all.deb || exit 1
+    apt-get update || exit 1
+
+    echo "INFO: Installing CUDA development libraries..."
+    apt-get install -y build-essential libcublas-dev-12-8 cuda-nvtx-12-8 libcusparse-dev-12-8 libcusolver-dev-12-8 || exit 1
+
+    # Clone and build the Nunchaku Python package
+    echo "INFO: Cloning Nunchaku source repository..."
+    git clone --recurse-submodules https://github.com/nunchaku-tech/nunchaku.git "${NUNCHAKU_TEMP_DIR}" || exit 1
+
+    echo "INFO: Building and installing Nunchaku Python package..."
+    ( cd "${NUNCHAKU_TEMP_DIR}" && MAX_JOBS=$(nproc) pip3 install -e . ) || exit 1
+
+else
+    # --- INSTALL FROM PRE-BUILT WHEEL (DEFAULT) ---
+    echo "INFO: No 'build' parameter. Installing Nunchaku from pre-built wheel."
+    pip install https://github.com/FNGarvin/provisioning/releases/download/nunchaku_wheel/nunchaku-1.0.1+torch2.9-cp312-cp312-linux_x86_64.whl || exit 1
+fi
+
 # Install the GGUF Python dependency for the GGUF Text Encoder model
 pip3 install --upgrade gguf || exit 1
-
-# Build the Nunchaku Python package
-git clone --recurse-submodules https://github.com/nunchaku-tech/nunchaku.git "${NUNCHAKU_TEMP_DIR}" || exit 1
-#uncomment the next line and comment the one below it out if you prefer to rebuild your own Nunchaku (eg, if you're running on your home machine or the container has upgraded to a different python version)
-#( cd "${NUNCHAKU_TEMP_DIR}" && pip3 install -e .)  || exit 1
-pip install https://raw.githubusercontent.com/FNGarvin/provisioning/main/nunchaku-1.0.1+torch2.9-cp312-cp312-linux_x86_64.whl
 
 # Placeholder for Xformers
 # Dynamically detect the CUDA version PyTorch was built against.
@@ -83,3 +101,5 @@ pkill -f "main.py" || true
 nohup python "${COMFYUI_DIR}/main.py" --listen 0.0.0.0 --port 8188 > "${COMFYUI_DIR}/comfyui.log" 2>&1 &
 
 echo "INFO: Provisioning complete. ComfyUI is starting."
+
+#END OF qwen_nunchaku_fp4.sh

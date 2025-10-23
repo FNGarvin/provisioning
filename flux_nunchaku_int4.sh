@@ -61,7 +61,7 @@ if [[ "$1" == "build" ]]; then
 else
     # --- INSTALL FROM PRE-BUILT WHEEL (DEFAULT) ---
     echo "INFO: No 'build' parameter. Installing Nunchaku from pre-built wheel."
-    pip install https://raw.githubusercontent.com/FNGarvin/provisioning/main/nunchaku-1.0.1+torch2.9-cp312-cp312-linux_x86_64.whl || exit 1
+    pip install https://github.com/FNGarvin/provisioning/releases/download/nunchaku_wheel/nunchaku-1.0.1+torch2.9-cp312-cp312-linux_x86_64.whl || exit 1
 fi
 
 # Placeholder for Xformers
