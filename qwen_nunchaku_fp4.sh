@@ -87,7 +87,8 @@ mkdir -p "${COMFYUI_DIR}/models/diffusion_models" "${COMFYUI_DIR}/models/text_en
 aria2c -x 16 -s 16 --dir="${COMFYUI_DIR}/models/diffusion_models" -o svdq-fp4_r128-qwen-image-lightningv1.1-8steps.safetensors "https://huggingface.co/nunchaku-tech/nunchaku-qwen-image/resolve/main/svdq-fp4_r128-qwen-image-lightningv1.1-8steps.safetensors?download=true" || exit 1
 
 # Text Encoder Models -> models/text_encoders/
-aria2c -x 16 -s 16 --dir="${COMFYUI_DIR}/models/text_encoders" -o Qwen2.5-VL-7B-Instruct-UD-Q4_K_XL.gguf "https://huggingface.co/unsloth/Qwen2.5-VL-7B-Instruct-GGUF/resolve/main/Qwen2.5-VL-7B-Instruct-UD-Q4_K_XL.gguf?download=true" || exit 1
+#aria2c -x 16 -s 16 --dir="${COMFYUI_DIR}/models/text_encoders" -o Qwen2.5-VL-7B-Instruct-UD-Q4_K_XL.gguf "https://huggingface.co/unsloth/Qwen2.5-VL-7B-Instruct-GGUF/resolve/main/Qwen2.5-VL-7B-Instruct-UD-Q4_K_XL.gguf?download=true" || exit 1
+aria2c -x 16 -s 16 --dir="${COMFYUI_DIR}/models/text_encoders" -o qwen_2.5_vl_7b_fp8_scaled.safetensors "https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI/resolve/main/split_files/text_encoders/qwen_2.5_vl_7b_fp8_scaled.safetensors?download=true" || exit 1
 
 # VAE Model -> models/vae/
 aria2c -x 16 -s 16 --dir="${COMFYUI_DIR}/models/vae" -o qwen_image_vae.safetensors "https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI/resolve/main/split_files/vae/qwen_image_vae.safetensors?download=true" || exit 1

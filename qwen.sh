@@ -32,7 +32,8 @@ mkdir -p "${COMFYUI_DIR}/models/loras"
 
 # Models
 # Text Encoder (replaces text encoder) -> models/text_encoders/
-aria2c -x 16 -s 16 --dir="${COMFYUI_DIR}/models/text_encoders" -o Qwen2.5-VL-7B-Instruct-UD-Q4_K_XL.gguf "https://huggingface.co/unsloth/Qwen2.5-VL-7B-Instruct-GGUF/resolve/main/Qwen2.5-VL-7B-Instruct-UD-Q4_K_XL.gguf?download=true"
+#aria2c -x 16 -s 16 --dir="${COMFYUI_DIR}/models/text_encoders" -o Qwen2.5-VL-7B-Instruct-UD-Q4_K_XL.gguf "https://huggingface.co/unsloth/Qwen2.5-VL-7B-Instruct-GGUF/resolve/main/Qwen2.5-VL-7B-Instruct-UD-Q4_K_XL.gguf?download=true"
+aria2c -x 16 -s 16 --dir="${COMFYUI_DIR}/models/text_encoders" -o qwen_2.5_vl_7b_fp8_scaled.safetensors "https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI/resolve/main/split_files/text_encoders/qwen_2.5_vl_7b_fp8_scaled.safetensors?download=true" || exit 1
 
 # Lora/Lightning (replaces lora) -> models/loras/
 aria2c -x 16 -s 16 --dir="${COMFYUI_DIR}/models/loras" -o Qwen-Image-Lightning-8steps-V1.0.safetensors "https://huggingface.co/lightx2v/Qwen-Image-Lightning/resolve/main/Qwen-Image-Lightning-8steps-V1.0.safetensors?download=true"
