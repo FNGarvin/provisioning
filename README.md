@@ -39,7 +39,7 @@ These scripts install models and custom nodes for a functional core environment.
 
 ### Add-on Provisioning Scripts (Optional Models)
 
-These scripts, located in the addons subdirectory, download optional diffuser models into the `models/diffusion_models` directory intended for pairing with one of the scripts above.
+These scripts, located in the addons subdirectory, download optional diffuser models into the `models/diffusion_models` directory intended for pairing with one of the scripts above.  Run like this: ```curl -s https://raw.githubusercontent.com/FNGarvin/provisioning/main/addons/nunchaku_krea_int4.sh | bash```
 
 | Filename | Architecture | Focus | Complementary Script |
 | :--- | :--- | :--- | :--- |
