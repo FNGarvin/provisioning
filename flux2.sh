@@ -1,36 +1,55 @@
-#!/usr/bin/env bash
+#!/bin/bash
 #
-# Title:    flux2.sh
-# Author:   FNGarvin
-# License:  CC BY-NC 4.0
-#
-#END OF HEADER
-
-#
-# NOTE: This script is specifically designed for use with the
-# madiator2011/better-comfyui:slim-5090 Docker image.
-# It assumes the environment and paths match that image.
+# script: flux2.sh
+# author: FNGarvin
+# license: MIT
+# description: Downloads Flux 2 dev assets using aria2c with header spoofing
+#              to bypass Hugging Face throttling and naming issues.
 #
 
-# --- Configuration ---
-# Define base paths to avoid using 'cd'. This makes the script more robust.
-readonly COMFYUI_DIR="/workspace/madapps/ComfyUI"
+# Script name for usage output
+SCRIPT_NAME=$(basename "$0")
 
-# --- Dependencies ---
-echo "INFO: Updating package list and installing aria2..."
-apt-get update && apt-get install -y --no-install-recommends aria2
+# Check for aria2c
+if ! command -v aria2c &> /dev/null; then
+    echo "Error: aria2c is not installed or not in PATH."
+    exit 1
+fi
 
-# --- Model Downloads ---
-echo "INFO: Downloading Flux2 models..."
-# Use the --dir option for aria2c to specify output location directly.
+# Target Directory
+OUTPUT_DIR="models/vae"
+mkdir -p "$OUTPUT_DIR"
 
-# Text Encoder (FP8)
-aria2c -x 16 -s 16 --dir="${COMFYUI_DIR}/models/text_encoders" -o mistral_3_small_flux2_fp8.safetensors "[https://huggingface.co/Comfy-Org/flux2-dev/resolve/main/split_files/text_encoders/mistral_3_small_flux2_fp8.safetensors?download=true](https://huggingface.co/Comfy-Org/flux2-dev/resolve/main/split_files/text_encoders/mistral_3_small_flux2_fp8.safetensors?download=true)"
+# List of URLs to download
+# Added the VAE link provided. Add other model parts here if needed.
+declare -a URLS=(
+    "[https://huggingface.co/Comfy-Org/flux2-dev/resolve/main/split_files/vae/flux2-vae.safetensors?download=true](https://huggingface.co/Comfy-Org/flux2-dev/resolve/main/split_files/vae/flux2-vae.safetensors?download=true)"
+)
 
-# Diffusion Model
-aria2c -x 16 -s 16 --dir="${COMFYUI_DIR}/models/diffusion_models" -o flux2_dev_fp8mixed.safetensors "[https://huggingface.co/Comfy-Org/flux2-dev/resolve/main/split_files/diffusion_models/flux2_dev_fp8mixed.safetensors?download=true](https://huggingface.co/Comfy-Org/flux2-dev/resolve/main/split_files/diffusion_models/flux2_dev_fp8mixed.safetensors?download=true)"
+echo "Starting download sequence..."
 
-# VAE
-aria2c -x 16 -s 16 --dir="${COMFYUI_DIR}/models/vae" -o flux2-vae.safetensors "[https://huggingface.co/Comfy-Org/flux2-dev/resolve/main/split_files/vae/flux2-vae.safetensors?download=true](https://huggingface.co/Comfy-Org/flux2-dev/resolve/main/split_files/vae/flux2-vae.safetensors?download=true)"
+for url in "${URLS[@]}"; do
+    echo "Processing: $url"
+    
+    # -x 16 -s 16: Max connection splitting
+    # --content-disposition: Fixes the '?download=true' filename issue
+    # --user-agent: Spoofs wget to bypass potential aria2 blocking/throttling
+    # --check-certificate=false: Optional, helps if local SSL certs are outdated
+    
+    aria2c --dir="$OUTPUT_DIR" \
+           --content-disposition \
+           --user-agent="Wget/1.21.3" \
+           -x 16 -s 16 -j 16 \
+           --file-allocation=none \
+           --summary-interval=0 \
+           "$url"
+           
+    if [ $? -ne 0 ]; then
+        echo "Error downloading: $url"
+    fi
+done
 
-echo "INFO: Model downloads complete. Please click 'Refresh' in the ComfyUI interface."
+echo "Batch complete."
+
+# EOF
+
