@@ -24,8 +24,8 @@ apt-get update && apt-get install -y --no-install-recommends aria2
 echo "INFO: Downloading Flux2 models..."
 # Use the --dir option for aria2c to specify output location directly.
 
-# Text Encoder
-aria2c -x 16 -s 16 --dir="${COMFYUI_DIR}/models/text_encoders" -o mistral_3_small_flux2_bf16.safetensors "[https://huggingface.co/Comfy-Org/flux2-dev/resolve/main/split_files/text_encoders/mistral_3_small_flux2_bf16.safetensors?download=true](https://huggingface.co/Comfy-Org/flux2-dev/resolve/main/split_files/text_encoders/mistral_3_small_flux2_bf16.safetensors?download=true)"
+# Text Encoder (FP8)
+aria2c -x 16 -s 16 --dir="${COMFYUI_DIR}/models/text_encoders" -o mistral_3_small_flux2_fp8.safetensors "[https://huggingface.co/Comfy-Org/flux2-dev/resolve/main/split_files/text_encoders/mistral_3_small_flux2_fp8.safetensors?download=true](https://huggingface.co/Comfy-Org/flux2-dev/resolve/main/split_files/text_encoders/mistral_3_small_flux2_fp8.safetensors?download=true)"
 
 # Diffusion Model
 aria2c -x 16 -s 16 --dir="${COMFYUI_DIR}/models/diffusion_models" -o flux2_dev_fp8mixed.safetensors "[https://huggingface.co/Comfy-Org/flux2-dev/resolve/main/split_files/diffusion_models/flux2_dev_fp8mixed.safetensors?download=true](https://huggingface.co/Comfy-Org/flux2-dev/resolve/main/split_files/diffusion_models/flux2_dev_fp8mixed.safetensors?download=true)"
@@ -34,4 +34,3 @@ aria2c -x 16 -s 16 --dir="${COMFYUI_DIR}/models/diffusion_models" -o flux2_dev_f
 aria2c -x 16 -s 16 --dir="${COMFYUI_DIR}/models/vae" -o flux2-vae.safetensors "[https://huggingface.co/Comfy-Org/flux2-dev/resolve/main/split_files/vae/flux2-vae.safetensors?download=true](https://huggingface.co/Comfy-Org/flux2-dev/resolve/main/split_files/vae/flux2-vae.safetensors?download=true)"
 
 echo "INFO: Model downloads complete. Please click 'Refresh' in the ComfyUI interface."
-
