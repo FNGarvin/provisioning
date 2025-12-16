@@ -26,7 +26,7 @@ if [ -d "${MADAPPS_PATH}" ]; then
 # Check the standard 'runpod-slim' path
 elif [ -d "${RUNPOD_SLIM_PATH}" ]; then
     COMFYUI_DIR="${RUNPOD_SLIM_PATH}"
-    VENV_NAME="venv-cu128"
+    VENV_NAME=".venv-cu128"
     echo "INFO: Detected ComfyUI in standard 'runpod-slim' path."
 else
     echo "ERROR: ComfyUI directory not found in either expected location."
