@@ -1,3 +1,21 @@
 #!/usr/bin/env bash
-readonly COMFYUI_DIR="/workspace/madapps/ComfyUI"
+# --- Path Detection and Standardization ---
+COMFYUI_DIR=""
+MADAPPS_PATH="/workspace/madapps/ComfyUI"
+RUNPOD_SLIM_PATH="/workspace/runpod-slim/ComfyUI"
+
+# Check Madiator's 'madapps' path first
+if [ -d "${MADAPPS_PATH}" ]; then
+    COMFYUI_DIR="${MADAPPS_PATH}"
+    echo "INFO: Detected ComfyUI in Madiator's custom 'madapps' path."
+# Check the standard 'runpod-slim' path
+elif [ -d "${RUNPOD_SLIM_PATH}" ]; then
+    COMFYUI_DIR="${RUNPOD_SLIM_PATH}"
+    echo "INFO: Detected ComfyUI in standard 'runpod-slim' path."
+else
+    echo "ERROR: ComfyUI directory not found in either expected location."
+    echo "Expected locations: ${MADAPPS_PATH} or ${RUNPOD_SLIM_PATH}"
+    exit 1
+fi
+# --- End Path Detection ---
 aria2c -x 16 -s 16 --dir="${COMFYUI_DIR}/models/diffusion_models" -o svdq-fp4_r128-qwen-image-edit-2509-lightningv2.0-8steps.safetensors "https://huggingface.co/nunchaku-tech/nunchaku-qwen-image-edit-2509/resolve/main/svdq-fp4_r128-qwen-image-edit-2509-lightningv2.0-8steps.safetensors?download=true"

@@ -12,7 +12,25 @@
 #
 
 # --- Configuration ---
-readonly COMFYUI_DIR="/workspace/madapps/ComfyUI"
+# --- Path Detection and Standardization ---
+COMFYUI_DIR=""
+MADAPPS_PATH="/workspace/madapps/ComfyUI"
+RUNPOD_SLIM_PATH="/workspace/runpod-slim/ComfyUI"
+
+# Check Madiator's 'madapps' path first
+if [ -d "${MADAPPS_PATH}" ]; then
+    COMFYUI_DIR="${MADAPPS_PATH}"
+    echo "INFO: Detected ComfyUI in Madiator's custom 'madapps' path."
+# Check the standard 'runpod-slim' path
+elif [ -d "${RUNPOD_SLIM_PATH}" ]; then
+    COMFYUI_DIR="${RUNPOD_SLIM_PATH}"
+    echo "INFO: Detected ComfyUI in standard 'runpod-slim' path."
+else
+    echo "ERROR: ComfyUI directory not found in either expected location."
+    echo "Expected locations: ${MADAPPS_PATH} or ${RUNPOD_SLIM_PATH}"
+    exit 1
+fi
+# --- End Path Detection ---
 readonly VENV_PATH="${COMFYUI_DIR}/.venv/bin/activate"
 readonly SUPPORTED_MODELS_BASE_PATH="${COMFYUI_DIR}/comfy/supported_models_base.py"
 readonly NUNCHAKU_WHEEL_URL="https://github.com/nunchaku-tech/nunchaku/releases/download/v1.0.2/nunchaku-1.0.2+torch2.9-cp312-cp312-linux_x86_64.whl"

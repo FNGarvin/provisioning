@@ -14,7 +14,25 @@
 
 # --- Configuration ---
 # Define base paths to avoid using 'cd'. This makes the script more robust.
-readonly COMFYUI_DIR="/workspace/madapps/ComfyUI"
+# --- Path Detection and Standardization ---
+COMFYUI_DIR=""
+MADAPPS_PATH="/workspace/madapps/ComfyUI"
+RUNPOD_SLIM_PATH="/workspace/runpod-slim/ComfyUI"
+
+# Check Madiator's 'madapps' path first
+if [ -d "${MADAPPS_PATH}" ]; then
+    COMFYUI_DIR="${MADAPPS_PATH}"
+    echo "INFO: Detected ComfyUI in Madiator's custom 'madapps' path."
+# Check the standard 'runpod-slim' path
+elif [ -d "${RUNPOD_SLIM_PATH}" ]; then
+    COMFYUI_DIR="${RUNPOD_SLIM_PATH}"
+    echo "INFO: Detected ComfyUI in standard 'runpod-slim' path."
+else
+    echo "ERROR: ComfyUI directory not found in either expected location."
+    echo "Expected locations: ${MADAPPS_PATH} or ${RUNPOD_SLIM_PATH}"
+    exit 1
+fi
+# --- End Path Detection ---
 readonly VENV_PATH="${COMFYUI_DIR}/.venv/bin/activate"
 
 # --- Dependencies ---
