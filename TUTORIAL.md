@@ -1,6 +1,6 @@
 # Step-by-Step Provisioning Guide for RunPod
 
-If you are new to RunPod or cloud-based GPUs, this guide will walk you through the entire process of setting up a pod and running these provisioning scripts.  This specific walkthrough demonstrates the **Wan 2.1 5B FastWan distillation**, which provides high-quality 720p text-to-video (and mediocre image-to-video) at impressive speeds.  
+If you are new to RunPod or cloud-based GPUs, this guide will walk you through the entire process of setting up a pod and running these provisioning scripts.  This specific walkthrough demonstrates the **Wan 2.2 5B FastWan distillation**, which provides high-quality 720p text-to-video (and mediocre image-to-video) at impressive speeds, but ComfyUI is capable of so much more.  For some other provisioning scripts, look [here](./README.md).  Or, once you become comfortable with downloading and using arbitrary models, browse through the many available templates inside ComfyUI or on [CivitAI](https://civitai.com/) and pick out something you'd like to try.  
 
 ---
 
@@ -16,7 +16,7 @@ Navigate to the **Templates** or **GPU Selection** screen.  For these scripts, w
 ## 3. Configure Storage and Overrides
 To ensure the model weights have enough room and to keep costs down, you need to adjust the disk settings.  
 * **Volume Disk:** Set this to **0**.  This is temporary storage for general testing and prevents you from being billed for storage after the pod is terminated.  
-* **Container Disk:** Increase this to **150 GB**.  The model weights for Wan 2.1 are large and require plenty of space.  
+* **Container Disk:** Increase this to **150 GB**.  The model weights for Wan 2.2 are large and require plenty of space.  
 * Click **Set Overrides** to confirm these changes.  
 
 ![Storage Configuration](./images/zero_volume.jpg)
@@ -67,14 +67,14 @@ When ComfyUI opens, you may see a yellow alert regarding a front-end mismatch or
 1. Click the **Templates** button in the ComfyUI sidebar if the template selection dialog is not already up.  
 2. Select the template appropriate for your script (in this case, **FastWan-Simple**).  
 3. **Prompting:** Enter your text prompt.  
-4. **Image-to-Video (Optional):** If you wish to use an image as input, click the **Load Image** node and press `Ctrl+B` (or right-click and choose "Enable") to activate it, and upload your file.
+4. **Image-to-Video (Optional):** If you wish to use an image as input, click the **Load Image** node and press `Ctrl+B` (or right-click and choose "Enable") to activate it, and upload your file.  
 5. Hit **Run**.  
 
 ![Workflow Setup](./images/select_template.jpg)
 ![Prompting](./images/prompt_and_go.jpg)
 
 ## 10. Results and Saving
-On an RTX 3090, a five-second video at 22fps typically takes between **110 to 120 seconds** to generate.  Once the process is complete, right-click the output video and select **Save Video As...** if you wish to download your work.  
+On an RTX 3090, a five-second video at 24fps typically takes between **110 to 120 seconds** to generate.  Once the process is complete, right-click the output video and select **Save Video As...** if you wish to download your work.  
 
 ![Saving Work](./images/save_your_work.jpg)
 
@@ -90,4 +90,3 @@ Below is a preview of the output.  Please note that the animated GIF is compress
 When you are finished with your session, remember to **Terminate** your pod from the RunPod dashboard.  It's the red button seen below:
 
 ![Don't be late to terminate](./images/connect_to_jupyter.jpg)
-
