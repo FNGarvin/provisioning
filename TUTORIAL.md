@@ -90,3 +90,25 @@ Below is a preview of the output.  Please note that the animated GIF is compress
 When you are finished with your session, remember to **Terminate** your pod from the RunPod dashboard.  It's the red button seen below:
 
 ![Don't be late to terminate](./images/connect_to_jupyter.jpg)
+
+---
+
+## Addendum: Operating via Mobile Phone
+
+If you are forced to navigate the ComfyUI interface on a mobile device, the smaller screen real estate introduces a few unique hurdles.  Here is how to handle them:
+
+### Accessing the Run Button
+On many mobile browsers, the ComfyUI toolbar is too wide to fit the screen, often hiding the **Run** (Queue Prompt) button.  To fix this, look for the small grid/grip icon on the far right of the visible toolbar.  Touch and drag this "grip" to the left to slide the toolbar over and reveal the hidden buttons.  
+
+![Revealing the Run Button](./images/click-dots-and-drag-hidden-run-button.png)
+
+### Enabling Image-to-Video (Removing Bypass)
+To use a source image on a mobile device, you must take the **Load Image** node off of "bypass" mode.  Because right-clicking is not an option, follow these steps:
+1.  **Select the Node:** Tap the **Load Image** node once to highlight it.  
+2.  **Open the Menu:** Tap the three dots (context menu) that appear in the node's floating toolbar.  
+3.  **Remove Bypass:** Scroll down and tap **Remove Bypass**.  The node will change from a purple/greyed-out state to its active colors.  
+
+![Removing Bypass on Mobile](./images/click-dots-and-remove-bypass-for-i2v.png)
+
+> [!NOTE]
+> While these workarounds make mobile use possible, a desktop or laptop remains the highly recommended way to interact with these tools due to the complexity of the node-based layout.
