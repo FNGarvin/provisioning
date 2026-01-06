@@ -75,19 +75,15 @@ echo "INFO: Activating Python venv and installing node requirements via uv..."
 # shellcheck source=/dev/null
 source "${VENV_PATH}"
 
-# Generate environment constraints to lock existing package versions
-echo "INFO: Creating environment constraints to prevent package sidegrades..."
-uv pip freeze > /tmp/constraints.txt
-
-# Install requirements for new nodes while respecting constraints
+# Force uv to respect the existing environment 
 if [ -f "${COMFYUI_DIR}/custom_nodes/ComfyUI-WanVideoWrapper/requirements.txt" ]; then
-    echo "INFO: Installing dependencies for WanVideoWrapper using uv..."
-    uv pip install -c /tmp/constraints.txt -r "${COMFYUI_DIR}/custom_nodes/ComfyUI-WanVideoWrapper/requirements.txt"
+    echo "INFO: Installing WanVideoWrapper requirements (strict no-upgrade)..."
+    uv pip install --no-upgrade -r "${COMFYUI_DIR}/custom_nodes/ComfyUI-WanVideoWrapper/requirements.txt"
 fi
 
 if [ -f "${COMFYUI_DIR}/custom_nodes/ComfyUI-VideoHelperSuite/requirements.txt" ]; then
-    echo "INFO: Installing dependencies for VideoHelperSuite using uv..."
-    uv pip install -c /tmp/constraints.txt -r "${COMFYUI_DIR}/custom_nodes/ComfyUI-VideoHelperSuite/requirements.txt"
+    echo "INFO: Installing VideoHelperSuite requirements (strict no-upgrade)..."
+    uv pip install --no-upgrade -r "${COMFYUI_DIR}/custom_nodes/ComfyUI-VideoHelperSuite/requirements.txt"
 fi
 
 # --- Restart ComfyUI Service ---
