@@ -40,6 +40,7 @@ These scripts install models and custom nodes for a functional core environment.
 | `qwen_nunchaku_fp4.sh`| **Qwen-Image** | Nunchaku FP4 + GGUF | REQUIRES RTX 5XXX Series | Installs Qwen Nunchaku model with FP4 acceleration. |
 | `qwen_nunchaku_int4.sh`| **Qwen-Image** | Nunchaku INT4 + GGUF | GTX 1660 Ti and newer | Installs Qwen Nunchaku model pairing with Q4 GGUF text encoder. |
 | `flux2.sh`| **FLUX.2** | FP8/Safetensors | 16GB+ VRAM | Installs FLUX.2 models (Text Encoder, Diffusion Model, VAE). |
+| `longcat-avatar.sh`| **WAN LongCat Avatar** | BF16/Safetensors | Tested on 24GB VRAM | Installs models and custom nodes necessary to load and run KJ's Longcat-Avatar workflow. |
 
 ### Add-on Provisioning Scripts (Optional Models)
 
