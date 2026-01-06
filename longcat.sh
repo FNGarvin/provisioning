@@ -27,40 +27,41 @@ elif [ -d "${RUNPOD_SLIM_PATH}" ]; then
     echo "INFO: Detected ComfyUI in standard 'runpod-slim' path."
 else
     echo "ERROR: ComfyUI directory not found in either expected location."
+    echo "Expected locations: ${MADAPPS_PATH} or ${RUNPOD_SLIM_PATH}"
     exit 1
 fi
 readonly VENV_PATH="${COMFYUI_DIR}/${VENV_NAME}/bin/activate"
 # --- End Path Detection ---
 
-# --- 1. Infrastructure & Node Setup (Fail Fast) ---
+# --- 1. Infrastructure & Node Setup ---
 echo "INFO: Installing uv and cloning nodes..."
 apt-get update && apt-get install -y --no-install-recommends aria2 curl
 curl -LsSf https://astral.sh/uv/install.sh | sh
 export PATH="${HOME}/.local/bin:${PATH}"
 
 git clone https://github.com/kijai/ComfyUI-WanVideoWrapper.git "${COMFYUI_DIR}/custom_nodes/ComfyUI-WanVideoWrapper" || true
+git clone https://github.com/kijai/ComfyUI-MelBandRoFormer.git "${COMFYUI_DIR}/custom_nodes/ComfyUI-MelBandRoFormer" || true
 git clone https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite.git "${COMFYUI_DIR}/custom_nodes/ComfyUI-VideoHelperSuite" || true
 
-# --- 2. Targeted Package Installation (With Hard Overrides) ---
-echo "INFO: Activating venv and locking environment..."
+# --- 2. Targeted Package Installation ---
+echo "INFO: Activating venv and installing node requirements via uv..."
 # shellcheck source=/dev/null
 source "${VENV_PATH}"
 
-# Force uv to respect existing package versions precisely
-pip freeze > /tmp/overrides.txt
-
 if [ -f "${COMFYUI_DIR}/custom_nodes/ComfyUI-WanVideoWrapper/requirements.txt" ]; then
-    echo "INFO: Installing WanVideoWrapper requirements..."
-    pip install -c /tmp/overrides.txt --no-build -r "${COMFYUI_DIR}/custom_nodes/ComfyUI-WanVideoWrapper/requirements.txt"
+    uv pip install --no-deps -r "${COMFYUI_DIR}/custom_nodes/ComfyUI-WanVideoWrapper/requirements.txt"
+fi
+
+if [ -f "${COMFYUI_DIR}/custom_nodes/ComfyUI-MelBandRoFormer/requirements.txt" ]; then
+    uv pip install --no-deps -r "${COMFYUI_DIR}/custom_nodes/ComfyUI-MelBandRoFormer/requirements.txt"
 fi
 
 if [ -f "${COMFYUI_DIR}/custom_nodes/ComfyUI-VideoHelperSuite/requirements.txt" ]; then
-    echo "INFO: Installing VideoHelperSuite requirements..."
-    pip install -c /tmp/overrides.txt --no-build -r "${COMFYUI_DIR}/custom_nodes/ComfyUI-VideoHelperSuite/requirements.txt"
+    uv pip install --no-deps -r "${COMFYUI_DIR}/custom_nodes/ComfyUI-VideoHelperSuite/requirements.txt"
 fi
 
-# --- 3. Model Downloads (Lengthy process) ---
-echo "INFO: Starting model downloads..."
+# --- 3. Model Downloads ---
+echo "INFO: Downloading LongCat-Avatar models and custom nodes..."
 
 mkdir -p "${COMFYUI_DIR}/models/diffusion_models/LongCat"
 mkdir -p "${COMFYUI_DIR}/models/text_encoders"
@@ -80,4 +81,4 @@ nohup python "${COMFYUI_DIR}/main.py" --listen 0.0.0.0 --port 8188 > "${COMFYUI_
 
 echo "INFO: Provisioning complete. ComfyUI is starting."
 
-#END OF longcat_provision.sh
+#END OF provision.sh
