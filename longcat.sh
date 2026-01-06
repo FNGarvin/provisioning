@@ -53,7 +53,7 @@ if [ -f "${COMFYUI_DIR}/custom_nodes/ComfyUI-WanVideoWrapper/requirements.txt" ]
 fi
 
 if [ -f "${COMFYUI_DIR}/custom_nodes/ComfyUI-MelBandRoFormer/requirements.txt" ]; then
-    uv pip install --no-deps -r "${COMFYUI_DIR}/custom_nodes/ComfyUI-MelBandRoFormer/requirements.txt"
+    pip install -r "${COMFYUI_DIR}/custom_nodes/ComfyUI-MelBandRoFormer/requirements.txt"
 fi
 
 if [ -f "${COMFYUI_DIR}/custom_nodes/ComfyUI-VideoHelperSuite/requirements.txt" ]; then
