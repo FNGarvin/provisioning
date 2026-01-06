@@ -32,7 +32,7 @@ fi
 readonly VENV_PATH="${COMFYUI_DIR}/${VENV_NAME}/bin/activate"
 # --- End Path Detection ---
 
-# --- 1. Infrastructure & Node Setup ---
+# --- 1. Infrastructure & Node Setup (Fail Fast) ---
 echo "INFO: Installing uv and cloning nodes..."
 apt-get update && apt-get install -y --no-install-recommends aria2 curl
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -41,7 +41,25 @@ export PATH="${HOME}/.local/bin:${PATH}"
 git clone https://github.com/kijai/ComfyUI-WanVideoWrapper.git "${COMFYUI_DIR}/custom_nodes/ComfyUI-WanVideoWrapper" || true
 git clone https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite.git "${COMFYUI_DIR}/custom_nodes/ComfyUI-VideoHelperSuite" || true
 
-# --- 3. Model Downloads ---
+# --- 2. Targeted Package Installation (With Hard Overrides) ---
+echo "INFO: Activating venv and locking environment..."
+# shellcheck source=/dev/null
+source "${VENV_PATH}"
+
+# Force uv to respect existing package versions precisely
+pip freeze > /tmp/overrides.txt
+
+if [ -f "${COMFYUI_DIR}/custom_nodes/ComfyUI-WanVideoWrapper/requirements.txt" ]; then
+    echo "INFO: Installing WanVideoWrapper requirements..."
+    pip install -c /tmp/overrides.txt --no-build -r "${COMFYUI_DIR}/custom_nodes/ComfyUI-WanVideoWrapper/requirements.txt"
+fi
+
+if [ -f "${COMFYUI_DIR}/custom_nodes/ComfyUI-VideoHelperSuite/requirements.txt" ]; then
+    echo "INFO: Installing VideoHelperSuite requirements..."
+    pip install -c /tmp/overrides.txt --no-build -r "${COMFYUI_DIR}/custom_nodes/ComfyUI-VideoHelperSuite/requirements.txt"
+fi
+
+# --- 3. Model Downloads (Lengthy process) ---
 echo "INFO: Starting model downloads..."
 
 mkdir -p "${COMFYUI_DIR}/models/diffusion_models/LongCat"
