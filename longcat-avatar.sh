@@ -43,22 +43,22 @@ aria2c -x 16 -s 16 --dir="${COMFYUI_DIR}/models/text_encoders" -o umt5-xxl-enc-b
 aria2c -x 16 -s 16 --dir="${COMFYUI_DIR}/models/diffusion_models" -o MelBandRoformer_fp16.safetensors "https://huggingface.co/Kijai/MelBandRoFormer_comfy/resolve/main/MelBandRoformer_fp16.safetensors?download=true"
 
 # --- Custom Nodes ---
-echo "INFO: Cloning WanVideoWrapper and MelBandRoFormer..."
+echo "INFO: Cloning WanVideoWrapper and VideoHelperSuite..."
 git clone https://github.com/kijai/ComfyUI-WanVideoWrapper.git "${COMFYUI_DIR}/custom_nodes/ComfyUI-WanVideoWrapper" || true
-git clone https://github.com/kijai/ComfyUI-MelBandRoFormer.git "${COMFYUI_DIR}/custom_nodes/ComfyUI-MelBandRoFormer" || true
+git clone https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite.git "${COMFYUI_DIR}/custom_nodes/ComfyUI-VideoHelperSuite" || true
 
 # --- Targeted Package Installation ---
 echo "INFO: Installing node requirements via uv..."
 # shellcheck source=/dev/null
 source "${VENV_PATH}"
 
-# Explicitly target only the two new nodes
+# Target only the nodes required for this specific workflow
 if [ -f "${COMFYUI_DIR}/custom_nodes/ComfyUI-WanVideoWrapper/requirements.txt" ]; then
     uv pip install -r "${COMFYUI_DIR}/custom_nodes/ComfyUI-WanVideoWrapper/requirements.txt"
 fi
 
-if [ -f "${COMFYUI_DIR}/custom_nodes/ComfyUI-MelBandRoFormer/requirements.txt" ]; then
-    uv pip install -r "${COMFYUI_DIR}/custom_nodes/ComfyUI-MelBandRoFormer/requirements.txt"
+if [ -f "${COMFYUI_DIR}/custom_nodes/ComfyUI-VideoHelperSuite/requirements.txt" ]; then
+    uv pip install -r "${COMFYUI_DIR}/custom_nodes/ComfyUI-VideoHelperSuite/requirements.txt"
 fi
 
 # --- Restart ComfyUI Service ---
