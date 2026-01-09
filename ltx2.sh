@@ -79,6 +79,16 @@ safe_download "${LORA_DIR}" "ltx-2-19b-ic-lora-detailer.safetensors" "${LORA_BAS
 safe_download "${LORA_DIR}" "ltx-2-19b-ic-lora-pose-control.safetensors" "${LORA_BASE}/LTX-2-19b-IC-LoRA-Pose-Control/resolve/main/ltx-2-19b-ic-lora-pose-control.safetensors?download=true"
 safe_download "${LORA_DIR}" "ltx-2-19b-lora-camera-control-static.safetensors" "${LORA_BASE}/LTX-2-19b-LoRA-Camera-Control-Static/resolve/main/ltx-2-19b-lora-camera-control-static.safetensors?download=true"
 
+# LTX-2 Camera Control - Dolly Movements
+safe_download "${LORA_DIR}" "ltx-2-19b-lora-camera-control-dolly-in.safetensors" "${LORA_BASE}/LTX-2-19b-LoRA-Camera-Control-Dolly-In/resolve/main/ltx-2-19b-lora-camera-control-dolly-in.safetensors?download=true"
+safe_download "${LORA_DIR}" "ltx-2-19b-lora-camera-control-dolly-out.safetensors" "${LORA_BASE}/LTX-2-19b-LoRA-Camera-Control-Dolly-Out/resolve/main/ltx-2-19b-lora-camera-control-dolly-out.safetensors?download=true"
+safe_download "${LORA_DIR}" "ltx-2-19b-lora-camera-control-dolly-left.safetensors" "${LORA_BASE}/LTX-2-19b-LoRA-Camera-Control-Dolly-Left/resolve/main/ltx-2-19b-lora-camera-control-dolly-left.safetensors?download=true"
+safe_download "${LORA_DIR}" "ltx-2-19b-lora-camera-control-dolly-right.safetensors" "${LORA_BASE}/LTX-2-19b-LoRA-Camera-Control-Dolly-Right/resolve/main/ltx-2-19b-lora-camera-control-dolly-right.safetensors?download=true"
+
+# LTX-2 Camera Control - Jib Movements
+safe_download "${LORA_DIR}" "ltx-2-19b-lora-camera-control-jib-up.safetensors" "${LORA_BASE}/LTX-2-19b-LoRA-Camera-Control-Jib-Up/resolve/main/ltx-2-19b-lora-camera-control-jib-up.safetensors?download=true"
+safe_download "${LORA_DIR}" "ltx-2-19b-lora-camera-control-jib-down.safetensors" "${LORA_BASE}/LTX-2-19b-LoRA-Camera-Control-Jib-Down/resolve/main/ltx-2-19b-lora-camera-control-jib-down.safetensors?download=true"
+
 # Unsloth 4-bit Gemma
 echo "INFO: Preparing download for Unsloth bnb-4bit Gemma..." 
 "${VENV_PYTHON}" -m pip install bitsandbytes 'accelerate>=0.26.0' 
